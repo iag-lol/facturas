@@ -31,20 +31,20 @@ const ClientsPage: React.FC<ClientsPageProps> = ({ setPage }) => {
   return (
     <Card>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-gray-800">Invoices</h2>
-        <Button onClick={() => setPage('invoices')}>Create Invoice</Button>
+        <h2 className="text-2xl font-bold text-gray-800">Facturas</h2>
+        <Button onClick={() => setPage('invoices')}>Crear factura</Button>
       </div>
       {loading ? (
-        <p>Loading...</p>
+        <p>Cargando...</p>
       ) : (
         <table className="w-full">
           <thead>
             <tr className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
-              <th className="py-3 px-6 text-left">Invoice #</th>
-              <th className="py-3 px-6 text-left">Client</th>
-              <th className="py-3 px-6 text-center">Date</th>
+              <th className="py-3 px-6 text-left">Factura #</th>
+              <th className="py-3 px-6 text-left">Cliente</th>
+              <th className="py-3 px-6 text-center">Fecha</th>
               <th className="py-3 px-6 text-right">Total</th>
-              <th className="py-3 px-6 text-center">Actions</th>
+              <th className="py-3 px-6 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-sm font-light">
@@ -68,13 +68,13 @@ const ClientsPage: React.FC<ClientsPageProps> = ({ setPage }) => {
                 <td className="py-3 px-6 text-center">
                   <div className="flex item-center justify-center">
                     <Button size="sm" variant="ghost">
-                      View
+                      Ver
                     </Button>
                     <Button size="sm" variant="ghost">
-                      Edit
+                      Editar
                     </Button>
                     <Button size="sm" variant="ghost">
-                      Delete
+                      Eliminar
                     </Button>
                   </div>
                 </td>

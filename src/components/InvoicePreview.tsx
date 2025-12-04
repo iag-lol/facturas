@@ -47,9 +47,9 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
             </div>
           </div>
           <div className="text-right">
-            <h2 className="text-3xl font-serif text-gray-700">INVOICE</h2>
+            <h2 className="text-3xl font-serif text-gray-700">FACTURA / BOLETA</h2>
             <p className="text-gray-500">#{invoice.invoiceNumber}</p>
-            <p className="text-gray-500">Date: {invoice.invoiceDate}</p>
+            <p className="text-gray-500">Fecha: {invoice.invoiceDate}</p>
             <div className={`mt-2 inline-block px-3 py-1 rounded-full text-sm font-bold ${invoice.status === 'PAGADO' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
               {invoice.status === 'PAGADO' ? 'PAGADO' : 'PENDIENTE DE PAGO'}
             </div>
@@ -59,7 +59,7 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
         {/* Client Info */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Bill To:
+            Cobrar a:
           </h3>
           <p className="text-gray-700 font-semibold">{invoice.clientCompany}</p>
           <p className="text-gray-700">{invoice.clientName}</p>
@@ -76,9 +76,9 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
         <table className="w-full mb-8">
           <thead>
             <tr className="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
-              <th className="py-3 px-6 text-left">Description</th>
-              <th className="py-3 px-6 text-center">Quantity</th>
-              <th className="py-3 px-6 text-right">Price</th>
+              <th className="py-3 px-6 text-left">Detalle</th>
+              <th className="py-3 px-6 text-center">Cantidad</th>
+              <th className="py-3 px-6 text-right">Precio</th>
               <th className="py-3 px-6 text-right">Total</th>
             </tr>
           </thead>

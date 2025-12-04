@@ -19,16 +19,16 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, currentPage }) => {
       </div>
       <nav className="flex-1 px-4 py-6 space-y-2">
         <a href="#" onClick={() => setPage('dashboard')} className={linkClasses('dashboard')}>
-          Dashboard
+          Panel
         </a>
         <a href="#" onClick={() => setPage('invoices')} className={linkClasses('invoices')}>
-          Invoices
+          Facturas
         </a>
         <a href="#" onClick={() => setPage('clients')} className={linkClasses('clients')}>
-          Clients
+          Clientes
         </a>
         <a href="#" onClick={() => setPage('settings')} className={linkClasses('settings')}>
-          Settings
+          Configuración
         </a>
       </nav>
     </div>

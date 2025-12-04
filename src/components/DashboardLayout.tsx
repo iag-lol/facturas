@@ -15,7 +15,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, setPage, cu
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="flex justify-between items-center p-6 bg-white border-b border-gray-200">
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-gray-800 capitalize">{currentPage}</h1>
+            <h1 className="text-2xl font-bold text-gray-800 capitalize">
+              {currentPage === 'dashboard' && 'Panel'}
+              {currentPage === 'invoices' && 'Facturas'}
+              {currentPage === 'clients' && 'Clientes'}
+              {currentPage === 'settings' && 'Configuración'}
+            </h1>
           </div>
           <div className="flex items-center space-x-4">
             <button className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">

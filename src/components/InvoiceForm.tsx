@@ -60,32 +60,37 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
     const total = neto + iva;
     const anticipo = invoice.payMode === 'half' ? total * 0.5 : total;
     const saldo = total - anticipo;
-    const { error } = await supabase.from('documentos').insert([
-      {
-        numero: invoice.invoiceNumber,
-        empresa_cliente: invoice.clientCompany || invoice.clientName,
-        contacto: invoice.clientName,
-        rut: invoice.clientRut,
-        correo: invoice.clientEmail,
-        telefono: invoice.clientPhone,
-        direccion: invoice.clientAddress,
-        items: invoice.items,
-        total,
-        descuento_pct: invoice.discountPct,
-        iva_incluye: invoice.includeIva,
-        pago_modo: invoice.payMode,
-        anticipo,
-        saldo,
-        estado: invoice.status,
-      },
-    ]);
-    setLoading(false);
-    if (error) {
-      console.error(error);
-      toast.error('Error saving invoice');
-    } else {
-      toast.success('Invoice saved successfully');
+    try {
+      const { error } = await supabase.from('documentos').insert([
+        {
+          numero: invoice.invoiceNumber,
+          empresa_cliente: invoice.clientCompany || invoice.clientName,
+          contacto: invoice.clientName,
+          rut: invoice.clientRut,
+          correo: invoice.clientEmail,
+          telefono: invoice.clientPhone,
+          direccion: invoice.clientAddress,
+          items: invoice.items,
+          total,
+          descuento_pct: invoice.discountPct,
+          iva_incluye: invoice.includeIva,
+          pago_modo: invoice.payMode,
+          anticipo,
+          saldo,
+          estado: invoice.status,
+        },
+      ]);
+      if (error) {
+        console.error(error);
+        toast.error('Error al guardar la factura');
+      } else {
+        toast.success('Factura guardada');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('No se pudo guardar la factura');
     }
+    setLoading(false);
   };
 
   return (
@@ -96,20 +101,20 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
-            label="Invoice Number"
+            label="Número de factura"
             name="invoiceNumber"
             value={invoice.invoiceNumber}
             onChange={handleInputChange}
           />
           <Input
-            label="Invoice Date"
+            label="Fecha de factura"
             name="invoiceDate"
             type="date"
             value={invoice.invoiceDate}
             onChange={handleInputChange}
           />
           <Input
-            label="Due Date"
+            label="Fecha vencimiento"
             name="dueDate"
             type="date"
             value={invoice.dueDate}
@@ -216,23 +221,23 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
           </div>
         </div>
 
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
             Items
-          </h3>
-          <div className="space-y-4">
-            {invoice.items.map((item, index) => (
-              <div key={index} className="flex space-x-4 items-end">
-                <Input
+        </h3>
+        <div className="space-y-4">
+          {invoice.items.map((item, index) => (
+            <div key={index} className="flex space-x-4 items-end">
+              <Input
                   className="w-1/2"
-                  placeholder="Item Name"
+                  placeholder="Nombre del producto o servicio"
                   name="name"
                   value={item.name}
                   onChange={(e) => handleItemChange(index, e)}
                 />
                 <Input
                   className="w-1/4"
-                  placeholder="Quantity"
+                  placeholder="Cantidad"
                   name="quantity"
                   type="number"
                   value={item.quantity}
@@ -240,7 +245,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                 />
                 <Input
                   className="w-1/4"
-                  placeholder="Price"
+                  placeholder="Precio"
                   name="price"
                   type="number"
                   value={item.price}
@@ -251,22 +256,22 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
                   variant="ghost"
                   onClick={() => handleRemoveItem(index)}
                 >
-                  Remove
+                  Eliminar
                 </Button>
               </div>
             ))}
-          </div>
-          <div className="mt-4">
-            <Button type="button" variant="secondary" onClick={handleAddItem}>
-              Add Item
-            </Button>
-          </div>
         </div>
+        <div className="mt-4">
+          <Button type="button" variant="secondary" onClick={handleAddItem}>
+              Agregar Item
+          </Button>
+        </div>
+      </div>
 
         <div className="mt-6 border-t pt-6">
           <div className="flex justify-end space-x-4">
             <Button type="button" variant="ghost">
-              Cancel
+              Cancelar
             </Button>
             <select
               className="border rounded-md px-3 py-2 font-semibold text-gray-700"
@@ -279,7 +284,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
               <option value="PAGADO">PAGADO</option>
             </select>
             <Button type="submit" loading={loading}>
-              Create Invoice
+              Crear factura
             </Button>
           </div>
         </div>

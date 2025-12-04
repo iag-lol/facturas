@@ -20,8 +20,8 @@ const InvoicesPage: React.FC = () => {
     clientState: 'CA',
     clientZip: '94103',
     items: [
-      { name: 'Regalo personalizado', quantity: 2, price: 25 },
-      { name: 'Empaque premium', quantity: 1, price: 8 },
+      { name: 'Regalo personalizado', quantity: 2, price: 25000 },
+      { name: 'Empaque premium', quantity: 1, price: 8000 },
     ],
     discountPct: 0,
     includeIva: true,
@@ -37,7 +37,7 @@ const InvoicesPage: React.FC = () => {
   return (
     <div>
       <div className="flex justify-end mb-4">
-        <Button onClick={handlePrint}>Print / Download PDF</Button>
+        <Button onClick={handlePrint}>Imprimir / Descargar PDF</Button>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
