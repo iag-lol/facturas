@@ -61,11 +61,14 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
             Bill To:
           </h3>
+          <p className="text-gray-700 font-semibold">{invoice.clientCompany}</p>
           <p className="text-gray-700">{invoice.clientName}</p>
           <p className="text-gray-700">{invoice.clientAddress}</p>
           <p className="text-gray-700">
             {invoice.clientCity}, {invoice.clientState} {invoice.clientZip}
           </p>
+          <p className="text-gray-700">{invoice.clientRut}</p>
+          <p className="text-gray-700">{invoice.clientPhone}</p>
           <p className="text-gray-700">{invoice.clientEmail}</p>
         </div>
 

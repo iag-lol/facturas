@@ -63,8 +63,11 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
     const { error } = await supabase.from('documentos').insert([
       {
         numero: invoice.invoiceNumber,
-        empresa_cliente: invoice.clientName,
+        empresa_cliente: invoice.clientCompany || invoice.clientName,
+        contacto: invoice.clientName,
+        rut: invoice.clientRut,
         correo: invoice.clientEmail,
+        telefono: invoice.clientPhone,
         direccion: invoice.clientAddress,
         items: invoice.items,
         total,
@@ -153,41 +156,59 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
 
         <div className="mt-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Bill To
+            Cobrar a
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
-              label="Client Name"
+              label="Nombre del cliente"
               name="clientName"
               value={invoice.clientName}
               onChange={handleInputChange}
             />
             <Input
-              label="Client Email"
+              label="Colegio / Empresa"
+              name="clientCompany"
+              value={invoice.clientCompany}
+              onChange={handleInputChange}
+            />
+            <Input
+              label="RUT"
+              name="clientRut"
+              value={invoice.clientRut}
+              onChange={handleInputChange}
+            />
+            <Input
+              label="Celular"
+              name="clientPhone"
+              value={invoice.clientPhone}
+              onChange={handleInputChange}
+            />
+            <Input
+              label="Correo electrónico"
               name="clientEmail"
               value={invoice.clientEmail}
               onChange={handleInputChange}
             />
             <Input
-              label="Client Address"
+              label="Dirección del cliente"
               name="clientAddress"
               value={invoice.clientAddress}
               onChange={handleInputChange}
             />
             <Input
-              label="Client City"
+              label="Ciudad Cliente"
               name="clientCity"
               value={invoice.clientCity}
               onChange={handleInputChange}
             />
             <Input
-              label="Client State"
+              label="Estado del cliente"
               name="clientState"
               value={invoice.clientState}
               onChange={handleInputChange}
             />
             <Input
-              label="Client Zip"
+              label="Código postal del cliente"
               name="clientZip"
               value={invoice.clientZip}
               onChange={handleInputChange}

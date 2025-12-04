@@ -9,6 +9,9 @@ export interface Invoice {
   invoiceDate: string;
   dueDate: string;
   clientName: string;
+  clientCompany: string;
+  clientRut: string;
+  clientPhone: string;
   clientEmail: string;
   clientAddress: string;
   clientCity: string;
