@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import type { Page } from '../types';
 
 interface ClientsPageProps {
-    setPage: (page: string) => void;
+  setPage: (page: Page) => void;
 }
 
 const ClientsPage: React.FC<ClientsPageProps> = ({ setPage }) => {

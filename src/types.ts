@@ -16,3 +16,5 @@ export interface Invoice {
   clientZip: string;
   items: InvoiceItem[];
 }
+
+export type Page = 'dashboard' | 'invoices' | 'clients' | 'settings';

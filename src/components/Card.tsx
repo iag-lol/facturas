@@ -1,13 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+type CardProps = HTMLMotionProps<'div'> & {
   children: React.ReactNode;
-}
+};
 
 const Card: React.FC<CardProps> = ({ children, className = '', ...props }) => {
   const baseStyles = 'bg-white shadow-md rounded-lg overflow-hidden';
-
   const combinedClassName = `${baseStyles} ${className}`;
 
   return (

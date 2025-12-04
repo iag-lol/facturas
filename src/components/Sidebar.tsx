@@ -1,8 +1,9 @@
 import React from 'react';
+import type { Page } from '../types';
 
 interface SidebarProps {
-  setPage: (page: string) => void;
-  currentPage: string;
+  setPage: (page: Page) => void;
+  currentPage: Page;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ setPage, currentPage }) => {

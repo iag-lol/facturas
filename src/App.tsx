@@ -4,8 +4,7 @@ import DashboardLayout from './components/DashboardLayout';
 import DashboardPage from './pages/DashboardPage';
 import InvoicesPage from './pages/InvoicesPage';
 import ClientsPage from './pages/Clients';
-
-type Page = 'dashboard' | 'invoices' | 'clients' | 'settings';
+import type { Page } from './types';
 
 function App() {
   const [page, setPage] = useState<Page>('dashboard');

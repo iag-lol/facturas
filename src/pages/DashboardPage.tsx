@@ -1,9 +1,10 @@
 import React from 'react';
 import Button from '../components/Button';
 import Card from '../components/Card';
+import type { Page } from '../types';
 
 interface DashboardPageProps {
-  setPage: (page: string) => void;
+  setPage: (page: Page) => void;
 }
 
 const DashboardPage: React.FC<DashboardPageProps> = ({ setPage }) => {

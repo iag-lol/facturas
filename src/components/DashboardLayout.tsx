@@ -1,10 +1,11 @@
 import React from 'react';
 import Sidebar from './Sidebar';
+import type { Page } from '../types';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  setPage: (page: string) => void;
-  currentPage: string;
+  setPage: (page: Page) => void;
+  currentPage: Page;
 }
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, setPage, currentPage }) => {
