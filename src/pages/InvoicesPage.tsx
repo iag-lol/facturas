@@ -20,6 +20,10 @@ const InvoicesPage: React.FC = () => {
       { name: 'Regalo personalizado', quantity: 2, price: 25 },
       { name: 'Empaque premium', quantity: 1, price: 8 },
     ],
+    discountPct: 0,
+    includeIva: true,
+    payMode: 'half',
+    status: 'PENDIENTE',
   });
 
   const componentRef = useRef<HTMLDivElement>(null);

@@ -17,6 +17,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInvoice({ ...invoice, [e.target.name]: e.target.value });
   };
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInvoice({ ...invoice, [e.target.name]: Number(e.target.value) || 0 });
+  };
 
   const handleItemChange = (
     index: number,
@@ -47,6 +50,16 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    const subtotal = invoice.items.reduce(
+      (acc, item) => acc + item.quantity * item.price,
+      0
+    );
+    const descuento = subtotal * (invoice.discountPct / 100);
+    const neto = subtotal - descuento;
+    const iva = invoice.includeIva ? neto * 0.19 : 0;
+    const total = neto + iva;
+    const anticipo = invoice.payMode === 'half' ? total * 0.5 : total;
+    const saldo = total - anticipo;
     const { error } = await supabase.from('documentos').insert([
       {
         numero: invoice.invoiceNumber,
@@ -54,10 +67,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
         correo: invoice.clientEmail,
         direccion: invoice.clientAddress,
         items: invoice.items,
-        total: invoice.items.reduce(
-          (acc, item) => acc + item.quantity * item.price,
-          0
-        ),
+        total,
+        descuento_pct: invoice.discountPct,
+        iva_incluye: invoice.includeIva,
+        pago_modo: invoice.payMode,
+        anticipo,
+        saldo,
+        estado: invoice.status,
       },
     ]);
     setLoading(false);
@@ -96,6 +112,43 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
             value={invoice.dueDate}
             onChange={handleInputChange}
           />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <Input
+            label="Descuento (%)"
+            name="discountPct"
+            type="number"
+            value={invoice.discountPct}
+            onChange={handleNumberChange}
+          />
+          <div className="flex items-center space-x-2">
+            <input
+              id="includeIva"
+              type="checkbox"
+              checked={invoice.includeIva}
+              onChange={(e) =>
+                setInvoice({ ...invoice, includeIva: e.target.checked })
+              }
+              className="h-5 w-5 text-blue-600"
+            />
+            <label htmlFor="includeIva" className="font-semibold text-gray-700">
+              Aplicar IVA 19%
+            </label>
+          </div>
+          <div className="flex items-center space-x-4">
+            <label className="font-semibold text-gray-700">Pago</label>
+            <select
+              className="border rounded-md px-3 py-2"
+              value={invoice.payMode}
+              onChange={(e) =>
+                setInvoice({ ...invoice, payMode: e.target.value as Invoice['payMode'] })
+              }
+            >
+              <option value="half">50% ahora / 50% al terminar</option>
+              <option value="full">100% antes de iniciar</option>
+            </select>
+          </div>
         </div>
 
         <div className="mt-6">
@@ -194,6 +247,16 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoice, setInvoice }) => {
             <Button type="button" variant="ghost">
               Cancel
             </Button>
+            <select
+              className="border rounded-md px-3 py-2 font-semibold text-gray-700"
+              value={invoice.status}
+              onChange={(e) =>
+                setInvoice({ ...invoice, status: e.target.value as Invoice['status'] })
+              }
+            >
+              <option value="PENDIENTE">PENDIENTE DE PAGO</option>
+              <option value="PAGADO">PAGADO</option>
+            </select>
             <Button type="submit" loading={loading}>
               Create Invoice
             </Button>

@@ -1,6 +1,13 @@
 import React from 'react';
 import { Invoice } from '../types';
 
+const formatter = new Intl.NumberFormat('es-CL', {
+  style: 'currency',
+  currency: 'CLP',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
 interface InvoicePreviewProps {
   invoice: Invoice;
 }
@@ -11,8 +18,12 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
       (acc, item) => acc + Number(item.quantity) * Number(item.price),
       0
     );
-    const tax = subtotal * 0.19;
-    const total = subtotal + tax;
+    const discount = subtotal * (invoice.discountPct / 100);
+    const neto = subtotal - discount;
+    const tax = invoice.includeIva ? neto * 0.19 : 0;
+    const total = neto + tax;
+    const anticipo = invoice.payMode === 'half' ? total * 0.5 : total;
+    const saldo = total - anticipo;
 
     return (
       <div
@@ -39,6 +50,9 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
             <h2 className="text-3xl font-serif text-gray-700">INVOICE</h2>
             <p className="text-gray-500">#{invoice.invoiceNumber}</p>
             <p className="text-gray-500">Date: {invoice.invoiceDate}</p>
+            <div className={`mt-2 inline-block px-3 py-1 rounded-full text-sm font-bold ${invoice.status === 'PAGADO' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+              {invoice.status === 'PAGADO' ? 'PAGADO' : 'PENDIENTE DE PAGO'}
+            </div>
           </div>
         </div>
 
@@ -78,11 +92,11 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   <span>{item.quantity}</span>
                 </td>
                 <td className="py-3 px-6 text-right">
-                  <span>${Number(item.price).toFixed(2)}</span>
+                  <span>{formatter.format(Number(item.price))}</span>
                 </td>
                 <td className="py-3 px-6 text-right">
                   <span>
-                    ${(Number(item.quantity) * Number(item.price)).toFixed(2)}
+                    {formatter.format(Number(item.quantity) * Number(item.price))}
                   </span>
                 </td>
               </tr>
@@ -95,15 +109,32 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
           <div className="w-1/2">
             <div className="flex justify-between text-gray-700">
               <p>Subtotal</p>
-              <p>${subtotal.toFixed(2)}</p>
+              <p>{formatter.format(subtotal)}</p>
             </div>
             <div className="flex justify-between text-gray-700">
-              <p>Tax (19%)</p>
-              <p>${tax.toFixed(2)}</p>
+              <p>Descuento ({invoice.discountPct}%)</p>
+              <p>-{formatter.format(discount)}</p>
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <p>IVA 19%</p>
+              <p>{invoice.includeIva ? formatter.format(tax) : '$0 (exento)'}</p>
             </div>
             <div className="flex justify-between text-gray-800 font-bold text-lg mt-2 pt-2 border-t">
               <p>Total</p>
-              <p>${total.toFixed(2)}</p>
+              <p>{formatter.format(total)}</p>
+            </div>
+            <div className="flex justify-between text-gray-700 mt-1">
+              <p>Anticipo</p>
+              <p>{formatter.format(anticipo)}</p>
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <p>Saldo</p>
+              <p>{formatter.format(saldo)}</p>
+            </div>
+            <div className="text-right text-xs text-gray-500 mt-1">
+              {invoice.payMode === 'half'
+                ? 'Condición: 50% antes y 50% al terminar.'
+                : 'Condición: 100% antes de iniciar.'}
             </div>
           </div>
         </div>
@@ -115,11 +146,11 @@ const InvoicePreview = React.forwardRef<HTMLDivElement, InvoicePreviewProps>(
         </div>
 
         {/* Stamp */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform -rotate-12">
-          <div className="border-4 border-red-500 text-red-500 text-6xl font-bold uppercase p-4 rounded-lg opacity-20">
-            Paid
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform -rotate-12">
+            <div className={`border-4 ${invoice.status === 'PAGADO' ? 'border-green-500 text-green-500' : 'border-yellow-500 text-yellow-500'} text-6xl font-bold uppercase p-4 rounded-lg opacity-20`}>
+              {invoice.status === 'PAGADO' ? 'PAGADO' : 'PENDIENTE'}
+            </div>
           </div>
-        </div>
       </div>
     );
   }
